@@ -1,0 +1,18 @@
+[Unit]
+Description=Dafang Agent (大大方方 Agent) - local novel-writing agent
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# 改成你自己的路径与用户
+WorkingDirectory=%h/dafang
+ExecStart=/usr/bin/env python3 %h/dafang/dafang.py
+Environment=DAFANG_PORT=11439
+Restart=always
+RestartSec=3
+StandardOutput=append:%h/.dafang/dafang.log
+StandardError=append:%h/.dafang/dafang.log
+
+[Install]
+WantedBy=multi-user.target

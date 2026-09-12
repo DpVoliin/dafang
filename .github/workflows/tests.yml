@@ -1,0 +1,40 @@
+name: tests
+
+# 为什么要有：这个项目是"单文件 + 人肉验收"，历史上踩过改稿吞标题、重写堆字、
+# 状态表混进假角色这类静默 bug。这里让每次 push 都跑一遍确定性自测（零依赖、零联网、
+# 零模型调用），30 秒内知道有没有回头踩坑。
+on:
+  push:
+    branches: ['**']
+    paths:
+      - 'dafang.py'
+      - 'tests/**'
+      - '.github/workflows/tests.yml'
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  unittest:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        py: ['3.9', '3.11', '3.12']
+        exclude:
+          # 三个系统各留两档就够，省 CI 时间
+          - os: windows-latest
+            py: '3.9'
+          - os: macos-latest
+            py: '3.9'
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.py }}
+      - name: 语法检查（单文件程序）
+        run: python -m py_compile dafang.py
+      - name: 核心自测（纯标准库 unittest）
+        run: python -m unittest discover -s tests -v
+      - name: 环境自检（--selftest，不需要模型/联网）
+        run: python dafang.py --selftest

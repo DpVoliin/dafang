@@ -1,0 +1,82 @@
+name: 打包桌面版
+
+# 自动把 dafang.py 打成 Windows / macOS / Linux 的单文件程序
+# 触发：打 tag（v*）自动发 Release；也可以在 Actions 页面手动跑一次只下载产物
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            artifact: 大大方方Agent-Windows
+          - os: macos-latest
+            artifact: 大大方方Agent-macOS
+          - os: ubuntu-latest
+            artifact: 大大方方Agent-Linux
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: 安装 PyInstaller
+        run: python -m pip install --upgrade pip pyinstaller
+
+      - name: 打包
+        run: pyinstaller dafang.spec --noconfirm
+
+      - name: 冒烟自检（确认产物真的能起来）
+        shell: bash
+        run: |
+          set -e
+          if [ "${{ runner.os }}" = "Windows" ]; then BIN="dist/大大方方Agent.exe"; else BIN="dist/大大方方Agent"; fi
+          ls -la dist/
+          DAFANG_DESKTOP=1 DAFANG_PORT=11599 DAFANG_HOME="$RUNNER_TEMP/dfh" "$BIN" > smoke.log 2>&1 &
+          PID=$!
+          for i in $(seq 1 20); do
+            sleep 1
+            CODE=$(curl -s -o /dev/null -m5 -w '%{http_code}' http://127.0.0.1:11599/ || true)
+            [ "$CODE" = "200" ] && break
+          done
+          echo "HTTP=$CODE"
+          cat smoke.log || true
+          kill $PID 2>/dev/null || true
+          [ "$CODE" = "200" ] || { echo "::error::产物启动失败"; exit 1; }
+          echo "✅ 产物启动正常"
+
+      - name: 收集产物
+        shell: bash
+        run: |
+          mkdir -p out
+          if [ "${{ runner.os }}" = "Windows" ]; then cp "dist/大大方方Agent.exe" out/; else cp "dist/大大方方Agent" out/; fi
+          cp README.md LICENSE THIRD_PARTY.md out/
+          mkdir -p out/launchers && cp -r launchers/* out/launchers/ || true
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: ${{ matrix.artifact }}
+          path: out/
+
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          path: artifacts
+      - uses: softprops/action-gh-release@v3
+        with:
+          files: artifacts/**/*
+          generate_release_notes: true

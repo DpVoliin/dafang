@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=大大方方 Agent
+Name[en]=Dafang Agent
+Comment=本地小说写作 Agent（纯深色，思考分层实时展示）
+Comment[en]=Local novel-writing agent
+Exec=sh -c 'cd "%k/.." 2>/dev/null || true; exec python3 "$PWD/dafang.py" --desktop'
+Terminal=true
+Categories=Office;TextEditor;
+Keywords=Novel;Writing;AI;小说;写作;
+StartupNotify=true

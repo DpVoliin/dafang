@@ -1,0 +1,27 @@
+# 运行时数据 / 密钥：绝不入库
+config.json
+.dafang/
+novels/
+skills/
+ext/
+*.log
+*.jsonl
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# 编辑器 / 系统
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+
+# 本地产物
+dist/
+build/
+*.zip
