@@ -14,9 +14,17 @@
 ![tests](https://github.com/DpVoliin/dafang_agent/actions/workflows/tests.yml/badge.svg)
 ![release](https://img.shields.io/github/v/release/DpVoliin/dafang_agent?color=orange&label=release)
 
+## 截图
+
+| 工作台：左边写稿，右边按阶段实时显示它此刻在干什么 | AI 味体检：零 token 的本地 lint，把稿子当代码查 |
+|:---:|:---:|
+| ![工作台](docs/screenshot-workbench.png) | ![AI 味体检](docs/screenshot-deai-lint.png) |
+
+> 截图里的作品是《雾城拾荒者》。右侧「思考分层」在生成时会逐阶段点亮；「AI 味体检」不调用模型，出的是可核验的机器判断。
 
 ## 目录结构
 
+- [截图](#截图)
 - [为什么需要它](#为什么需要它)
 - [怎么跑](#怎么跑)
 - [能做什么](#能做什么)
