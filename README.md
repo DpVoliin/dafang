@@ -6,6 +6,12 @@
 
 它干一件事：帮你写完一部长篇小说。左边是工坊，右边按阶段实时显示它此刻在干什么。
 
+> ### 🧪 测试阶段说明
+> 本项目**目前处于测试阶段**：功能和界面仍在调整，**不建议直接用于生产**；
+> 生成的长文本请自行校对后再使用（模型的输出不保证事实与逻辑完全正确）。
+> 遇到问题欢迎提 issue，作者会尽量修，但**不承诺响应时间**。
+
+
 ![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?logo=python&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green)
 ![第三方依赖](https://img.shields.io/badge/第三方依赖-0-blue)
@@ -13,6 +19,7 @@
 ![平台](https://img.shields.io/badge/Windows%20%7C%20macOS%20%7C%20Linux-可用-lightgrey)
 ![tests](https://github.com/DpVoliin/dafang_agent/actions/workflows/tests.yml/badge.svg)
 ![release](https://img.shields.io/github/v/release/DpVoliin/dafang_agent?color=orange&label=release)
+![阶段：测试阶段](https://img.shields.io/badge/%E9%98%B6%E6%AE%B5-%E6%B5%8B%E8%AF%95%E9%98%B6%E6%AE%B5-yellow.svg)
 
 ## 截图
 
